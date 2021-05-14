@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AuthRequest, AuthResponse } from 'src/app/models';
 import { UserService } from 'src/app/services';
 
@@ -12,15 +12,14 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
-  const authResponse: AuthResponse = {
-    AccessToken: "testing",
-    ExpireIn: 10,
-    UserName: "Test",
-    UserRole: "abcde"
-  };
-  const userService: any = {
-    authenticateUser(obj: AuthRequest) {
-      return of(authResponse);
+  const userServiceStub: any = {
+    authenticateUser(obj: any): Observable<AuthResponse> {
+      return of({
+        AccessToken: "testing",
+        ExpireIn: 10,
+        UserName: "Test",
+        UserRole: "abcde"
+      });
     }
   };
 
@@ -30,21 +29,19 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, ReactiveFormsModule],
       declarations: [LoginComponent],
       providers: [
         FormBuilder,
         {
           provide: UserService,
-          useValue: userService
+          useValue: userServiceStub
         },
         {
           provide: Router,
           useValue: router
         },
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -57,8 +54,17 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should return data', () => {
+    const data = component.f;
+    expect(data).toBeTruthy();
+  });
+
+
   it('should onSubmit', () => {
-    spyOn(userService, 'authenticateUser');
+    component.loginForm.setValue({
+      UserName: "Mathew",
+      Password: "Temppass@1234"
+    });
     component.onSubmit();
   });
 });
