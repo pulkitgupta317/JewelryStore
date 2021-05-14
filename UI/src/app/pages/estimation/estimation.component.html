@@ -1,0 +1,87 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="aa-myaccount-area">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="aa-myaccount-login">
+                            <h4>Estimation</h4>
+                            <h4> Welcome: {{authService.userValue.UserRole}} User</h4>
+                            <form [formGroup]="estimationForm" (ngSubmit)="onSubmit()">
+                                <div class="form-group">
+                                    <label for="">GoldPrice(per gram)<span>*</span></label>
+                                    <input type="number" formControlName="GoldPrice" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.GoldPrice.errors }" />
+                                    <ng-container *ngIf="submitted && f.GoldPrice.errors">
+                                        <div class="invalid-feedback">
+                                            <ng-container *ngIf="f.GoldPrice.errors.required">
+                                                <div>GoldPrice is required</div>
+                                            </ng-container>
+                                            <ng-container *ngIf="f.GoldPrice.errors.min">
+                                                <div>GoldPrice should not be less than 0</div>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Weight(per gram)<span>*</span></label>
+                                    <input type="number" formControlName="Weight" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.Weight.errors }" />
+                                    <ng-container *ngIf="submitted && f.Weight.errors">
+                                        <div class="invalid-feedback">
+                                            <ng-container *ngIf="f.Weight.errors.required">
+                                                <div>Weight is required</div>
+                                            </ng-container>
+                                            <ng-container *ngIf="f.Weight.errors.min">
+                                                <div>Weight should not be less than 0</div>
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <ng-container *ngIf='isDiscountVisible'>
+                                    <div class="form-group">
+                                        <label for="">Discount<span>*</span></label>
+                                        <input type="number" formControlName="Discount" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.Discount.errors }" />
+                                        <ng-container *ngIf="submitted && f.Discount.errors">
+                                            <div class="invalid-feedback">
+                                                <ng-container *ngIf="f.Discount.errors.required">
+                                                    <div>Discount is required</div>
+                                                </ng-container>
+                                                <ng-container *ngIf="f.Discount.errors.min">
+                                                    <div>Discount should not be less than 0</div>
+                                                </ng-container>
+                                                <ng-container *ngIf="f.Discount.errors.max">
+                                                    <div>Discount should not more than 100</div>
+                                                </ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                                <div class="form-group">
+                                    <button class="btn btn-primary">
+                                        Calculate
+                                    </button>
+                                </div>
+                                <ng-container *ngIf='submitted'>
+                                    <div class="form-group">
+                                        Total Price: Rs{{totalAmount}}
+                                    </div>
+                                    <a class="btn btn-primary mr-1" (click)="printToScreen()">
+                                        Print to Screen
+                                    </a>
+                                    <a class="btn btn-primary mr-1" (click)="printToFile()">
+                                        Print to File
+                                    </a>
+                                    <a class="btn btn-primary mr-1" (click)="printToPaper()">
+                                        Print to Paper
+                                    </a>
+                                </ng-container>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
